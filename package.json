@@ -1,9 +1,12 @@
 {
   "name": "stemdrop-ableton",
+  "productName": "StemDrop",
   "version": "0.1.0",
   "description": "Lokaler MVP-Prototyp zum schnellen Austausch von Audio-Dateien waehrend einer Ableton-Session.",
   "private": true,
   "type": "module",
+  "main": "electron-app/main.js",
+  "author": "StemDrop",
   "scripts": {
     "start": "node server/ws-server.js",
     "demo": "node server/demo.js",
@@ -18,7 +21,10 @@
     "test:relay": "node client/simulate-transfer.js",
     "history": "node server/history.js",
     "simulate": "node client/simulate-transfer.js",
-    "gui": "node electron-app/run-gui.js"
+    "gui": "node electron-app/run-gui.js",
+    "build": "ELECTRON_CACHE=.npm-cache/electron ELECTRON_BUILDER_CACHE=.npm-cache/electron-builder electron-builder --mac dir",
+    "dist": "ELECTRON_CACHE=.npm-cache/electron ELECTRON_BUILDER_CACHE=.npm-cache/electron-builder electron-builder --mac dmg",
+    "build:linux": "ELECTRON_CACHE=.npm-cache/electron ELECTRON_BUILDER_CACHE=.npm-cache/electron-builder electron-builder --linux AppImage deb --x64"
   },
   "dependencies": {
     "chokidar": "^4.0.3",
@@ -28,6 +34,47 @@
     "node": ">=20"
   },
   "devDependencies": {
-    "electron": "^34.0.0"
+    "electron": "^34.0.0",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "com.stemdrop.ableton",
+    "productName": "StemDrop",
+    "asar": false,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron-app/**/*",
+      "client/**/*",
+      "server/**/*",
+      "shared/.gitkeep",
+      "logs/.gitkeep",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.music",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ]
+    },
+    "dmg": {
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "linux": {
+      "category": "Audio",
+      "maintainer": "StemDrop <stemdrop@example.com>",
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "artifactName": "${productName}-${version}.${ext}"
+    }
   }
 }

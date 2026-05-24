@@ -36,6 +36,69 @@ Zum Senden eine WAV-, AIFF- oder MP3-Datei in den Drag-and-Drop-Bereich ziehen. 
 
 Empfangene Dateien liegen in `shared/incoming`. Der Button `Incoming-Ordner` oeffnet den Ordner direkt, die History-Liste zeigt die letzten Transfers.
 
+## macOS App bauen
+
+Die Mac-App fuer einen schnellen lokalen Test bauen:
+
+```bash
+npm run build
+```
+
+Das erzeugt:
+
+```text
+dist/mac-arm64/StemDrop.app
+```
+
+Die distributable `.dmg` bauen:
+
+```bash
+npm run dist
+```
+
+Der DMG-Build schreibt die fertige Datei nach:
+
+```text
+dist/
+```
+
+Der Dateiname sieht zum Beispiel so aus:
+
+```text
+dist/StemDrop-0.1.0-arm64.dmg
+```
+
+Zum Testen die `.dmg` oeffnen und `StemDrop.app` in den Programme-Ordner ziehen. Danach die App wie eine normale macOS-App starten, ohne ein Terminal offen zu lassen.
+
+Falls macOS Gatekeeper warnt, weil der Test-Build nicht signiert/notarisiert ist: Rechtsklick auf `StemDrop.app`, dann `Oeffnen` auswaehlen und den Dialog bestaetigen. Fuer echte Weitergabe muss spaeter ein Developer-ID-Zertifikat plus Notarisierung eingerichtet werden.
+
+## Linux AppImage bauen
+
+Die Linux-Version bauen:
+
+```bash
+npm run build:linux
+```
+
+Das AppImage landet hier:
+
+```text
+dist/StemDrop-0.1.0.AppImage
+```
+
+Auf dem Linux-Rechner ausfuehrbar machen und starten:
+
+```bash
+chmod +x StemDrop-0.1.0.AppImage
+./StemDrop-0.1.0.AppImage
+```
+
+Optional erzeugt der Build zusaetzlich ein Debian-Paket:
+
+```text
+dist/StemDrop-0.1.0.deb
+```
+
 ## Zwei lokale Clients starten
 
 Terminal 1:
