@@ -1,0 +1,29 @@
+{
+  "name": "stemdrop-ableton",
+  "version": "0.1.0",
+  "description": "Lokaler MVP-Prototyp zum schnellen Austausch von Audio-Dateien waehrend einer Ableton-Session.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server/ws-server.js",
+    "demo": "node server/demo.js",
+    "watch": "node server/watch.js",
+    "analyze": "node server/analyze.js",
+    "server": "node server/ws-server.js",
+    "helper": "node server/local-helper-api.js",
+    "client": "node client/local-client.js",
+    "history": "node server/history.js",
+    "simulate": "node client/simulate-transfer.js",
+    "gui": "node electron-app/run-gui.js"
+  },
+  "dependencies": {
+    "chokidar": "^4.0.3",
+    "ws": "^8.21.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "electron": "^34.0.0"
+  }
+}

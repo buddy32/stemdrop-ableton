@@ -1,0 +1,43 @@
+[
+  {
+    "fileName": "ws-demo-1779607749410.wav",
+    "size": 44144,
+    "timestamp": "2026-05-24T07:29:09.512Z",
+    "direction": "sent",
+    "roomCode": "HIST01"
+  },
+  {
+    "fileName": "ws-demo-1779607749410.wav",
+    "size": 44144,
+    "timestamp": "2026-05-24T07:29:09.513Z",
+    "direction": "received",
+    "roomCode": "HIST01"
+  },
+  {
+    "timestamp": "2026-05-24T10:25:23.326Z",
+    "direction": "received",
+    "filename": "ws-demo-1779618323222.wav",
+    "filesize": 44144,
+    "roomCode": "HIST02",
+    "sourcePath": "shared/outgoing/ws-demo-1779618323222.wav",
+    "targetPath": "shared/incoming/ws-received-ws-demo-1779618323222.wav"
+  },
+  {
+    "timestamp": "2026-05-24T10:27:11.687Z",
+    "direction": "sent",
+    "filename": "ws-demo-1779618431590.wav",
+    "filesize": 44144,
+    "roomCode": "HIST03",
+    "sourcePath": "shared/outgoing/ws-demo-1779618431590.wav",
+    "targetPath": "remote:shared/incoming"
+  },
+  {
+    "timestamp": "2026-05-24T10:27:11.689Z",
+    "direction": "received",
+    "filename": "ws-demo-1779618431590.wav",
+    "filesize": 44144,
+    "roomCode": "HIST03",
+    "sourcePath": "shared/outgoing/ws-demo-1779618431590.wav",
+    "targetPath": "shared/incoming/ws-received-ws-demo-1779618431590.wav"
+  }
+]

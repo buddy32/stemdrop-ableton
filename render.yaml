@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: stemdrop-relay
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: STEMDROP_WS_HOST
+        value: 0.0.0.0
