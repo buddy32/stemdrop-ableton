@@ -30,9 +30,19 @@ export function createStemDropServer({ host = "0.0.0.0", port = 8787, roomCode =
     return code;
   }
 
+  function getRoomCodes() {
+    return Array.from(rooms.keys());
+  }
+
+  function formatRoomCodes() {
+    const codes = getRoomCodes();
+    return codes.length > 0 ? codes.join(", ") : "(keine)";
+  }
+
   function createRoom(code = getUniqueRoomCode(), persistent = false) {
-    const room = { code, clients: new Set(), persistent, transfers: new Map() };
-    rooms.set(code, room);
+    const normalizedCode = String(code ?? "").trim().toUpperCase() || getUniqueRoomCode();
+    const room = { code: normalizedCode, clients: new Set(), persistent, transfers: new Map() };
+    rooms.set(normalizedCode, room);
     return room;
   }
 
@@ -79,8 +89,10 @@ export function createStemDropServer({ host = "0.0.0.0", port = 8787, roomCode =
   function handleJoinRoom(client, requestedCode) {
     leaveRoom(client);
     const normalizedRoomCode = String(requestedCode ?? "").trim().toUpperCase();
+    events.emit("log", `[ROOM] join_room angefragt: ${normalizedRoomCode || "(leer)"}`);
+    events.emit("log", `[ROOM] Vorhandene Room-Codes: ${formatRoomCodes()}`);
     const room = rooms.get(normalizedRoomCode);
-    if (!room) return send(client, { type: "error", message: "Room-Code nicht gefunden." });
+    if (!room) return send(client, { type: "error", message: `Room-Code nicht gefunden. Vorhandene Room-Codes: ${formatRoomCodes()}` });
     if (room.clients.size >= 2) return send(client, { type: "error", message: "Room ist bereits voll." });
     room.clients.add(client);
     client.roomCode = normalizedRoomCode;
@@ -116,6 +128,7 @@ export function createStemDropServer({ host = "0.0.0.0", port = 8787, roomCode =
   }
 
   const defaultRoom = createRoom(undefined, true);
+  if (!rooms.has(defaultRoom.code)) rooms.set(defaultRoom.code, defaultRoom);
   const wss = new WebSocketServer({ host, port });
   wss.on("connection", (client) => {
     events.emit("log", "[SERVER] Client verbunden");
