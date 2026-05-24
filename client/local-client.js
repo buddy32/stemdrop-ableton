@@ -33,8 +33,15 @@ async function askForConfig() {
   }
 }
 
+function buildRelayUrl({ host, port }) {
+  const normalizedHost = String(host ?? "").trim();
+  if (normalizedHost.startsWith("ws://") || normalizedHost.startsWith("wss://")) return normalizedHost;
+  if (normalizedHost.toLowerCase().endsWith(".onrender.com")) return `wss://${normalizedHost}`;
+  return `ws://${normalizedHost}:${port}`;
+}
+
 const config = await askForConfig();
-const relayUrl = `ws://${config.host}:${config.port}`;
+const relayUrl = buildRelayUrl(config);
 const client = new StemDropClient({ restrictSendToOutgoing: true });
 
 client.on("send-start", ({ fileName, size }) => {
