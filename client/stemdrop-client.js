@@ -24,7 +24,7 @@ function send(socket, message) {
   }
 }
 
-function waitForJoin(socket) {
+function waitForRoomResponse(socket, successType) {
   return new Promise((resolve, reject) => {
     const handleMessage = (rawMessage) => {
       const message = JSON.parse(rawMessage.toString());
@@ -35,7 +35,7 @@ function waitForJoin(socket) {
         return;
       }
 
-      if (message.type === "room_joined") {
+      if (message.type === successType) {
         cleanup();
         resolve(message);
       }
@@ -86,19 +86,7 @@ export class StemDropClient extends EventEmitter {
     };
   }
 
-  async connect({ relayUrl, roomCode }) {
-    await this.close();
-
-    const normalizedRoomCode = String(roomCode ?? "").trim().toUpperCase();
-    if (!normalizedRoomCode) throw new Error("Room-Code fehlt.");
-
-    this.socket = await openSocket(relayUrl);
-    send(this.socket, { type: "join_room", roomCode: normalizedRoomCode });
-    const joined = await waitForJoin(this.socket);
-
-    this.currentRoomCode = joined.roomCode;
-    this.peerCount = Number(joined.peers ?? 1);
-
+  attachSocketHandlers() {
     this.socket.on("message", (rawMessage) => {
       this.handleMessage(rawMessage).catch((error) => this.emit("error", error));
     });
@@ -109,6 +97,38 @@ export class StemDropClient extends EventEmitter {
     });
 
     this.socket.on("error", (error) => this.emit("error", error));
+  }
+
+  async connect({ relayUrl, roomCode }) {
+    await this.close();
+
+    const normalizedRoomCode = String(roomCode ?? "").trim().toUpperCase();
+    if (!normalizedRoomCode) throw new Error("Room-Code fehlt.");
+
+    this.socket = await openSocket(relayUrl);
+    send(this.socket, { type: "join_room", roomCode: normalizedRoomCode });
+    const joined = await waitForRoomResponse(this.socket, "room_joined");
+
+    this.currentRoomCode = joined.roomCode;
+    this.peerCount = Number(joined.peers ?? 1);
+
+    this.attachSocketHandlers();
+    this.emit("connected", this.getStatus());
+
+    return this.getStatus();
+  }
+
+  async createSession({ relayUrl }) {
+    await this.close();
+
+    this.socket = await openSocket(relayUrl);
+    send(this.socket, { type: "create_room" });
+    const created = await waitForRoomResponse(this.socket, "room_created");
+
+    this.currentRoomCode = created.roomCode;
+    this.peerCount = 1;
+
+    this.attachSocketHandlers();
     this.emit("connected", this.getStatus());
 
     return this.getStatus();
@@ -221,7 +241,7 @@ export class StemDropClient extends EventEmitter {
       targetPath: toProjectPath(targetPath)
     });
 
-    this.emit("receive-complete", { fileName: transfer.fileName, size: transfer.size, targetPath });
+    this.emit("receive-complete", { transferId: transfer.transferId, fileName: transfer.fileName, size: transfer.size, targetPath });
   }
 
   async handleMessage(rawMessage) {
@@ -246,6 +266,7 @@ export class StemDropClient extends EventEmitter {
 
     if (message.type === "file_offer") {
       this.activeTransfers.set(message.transferId, {
+        transferId: message.transferId,
         fileName: message.fileName,
         size: Number(message.size),
         sourcePath: message.sourcePath ?? `remote:${message.fileName}`,

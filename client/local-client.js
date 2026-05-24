@@ -20,7 +20,8 @@ async function askForConfig() {
 
   try {
     const host = envHost || await rl.question("Server-IP: ");
-    const port = envPort || await rl.question("Port [8787]: ");
+    const hostUsesOwnPort = startsWithWebSocketProtocol(host) || String(host ?? "").trim().toLowerCase().endsWith(".onrender.com");
+    const port = envPort || (hostUsesOwnPort ? "" : await rl.question("Port [8787]: "));
     const roomCode = envRoomCode || await rl.question("Room-Code: ");
 
     return {
@@ -33,9 +34,14 @@ async function askForConfig() {
   }
 }
 
+function startsWithWebSocketProtocol(value) {
+  const normalizedValue = String(value ?? "").trim();
+  return normalizedValue.startsWith("ws://") || normalizedValue.startsWith("wss://");
+}
+
 function buildRelayUrl({ host, port }) {
   const normalizedHost = String(host ?? "").trim();
-  if (normalizedHost.startsWith("ws://") || normalizedHost.startsWith("wss://")) return normalizedHost;
+  if (startsWithWebSocketProtocol(normalizedHost)) return normalizedHost;
   if (normalizedHost.toLowerCase().endsWith(".onrender.com")) return `wss://${normalizedHost}`;
   return `ws://${normalizedHost}:${port}`;
 }

@@ -12,29 +12,36 @@ h1, h2, p { margin: 0; }
 h1 { font-size: 30px; letter-spacing: 0; }
 h2 { font-size: 15px; color: #f4f7f8; margin-bottom: 16px; }
 p { color: #96a2aa; margin-top: 7px; }
-.status { padding: 8px 12px; border: 1px solid #2b3439; background: #171b1e; border-radius: 8px; color: #96e6bd; min-width: 120px; text-align: center; }
+.status { padding: 8px 12px; border: 1px solid #2b3439; background: #171b1e; border-radius: 8px; min-width: 120px; text-align: center; transition: color .18s ease, border-color .18s ease, background .18s ease; }
+.status.connected { color: #86efac; border-color: #276749; background: #102018; }
+.status.offline { color: #fca5a5; border-color: #7f2d2d; background: #211213; }
 .grid { display: grid; grid-template-columns: 360px 1fr; gap: 14px; }
 .panel { background: #171b1e; border: 1px solid #2a3238; border-radius: 8px; padding: 18px; box-shadow: 0 16px 40px rgba(0,0,0,.22); }
 .control-panel, .drop-panel { min-height: 360px; }
 .history-panel, .log-panel { min-height: 270px; }
 .actions, .folder-actions, .history-head { display: flex; gap: 10px; align-items: center; }
 .history-head { justify-content: space-between; }
-button { border: 1px solid #37434b; background: #22292e; color: #e7ecef; border-radius: 8px; padding: 10px 12px; cursor: pointer; font-weight: 700; }
-button:hover { background: #2c353b; border-color: #5a6a73; }
+button { border: 1px solid #37434b; background: #22292e; color: #e7ecef; border-radius: 8px; padding: 10px 12px; cursor: pointer; font-weight: 700; transition: background .16s ease, border-color .16s ease, transform .16s ease; }
+button:hover { background: #2c353b; border-color: #5a6a73; transform: translateY(-1px); }
+button:active { transform: translateY(0); }
 .fields { display: grid; gap: 10px; margin: 16px 0; }
 label { display: grid; gap: 6px; color: #9aa7af; font-size: 12px; }
 input { width: 100%; background: #0f1214; color: #f2f5f6; border: 1px solid #303a40; border-radius: 8px; padding: 10px; font-size: 14px; }
 .room-display, .client-display { display: flex; justify-content: space-between; align-items: center; background: #0f1214; border: 1px solid #2c353b; border-radius: 8px; padding: 12px; margin-top: 10px; color: #8f9aa2; }
 .room-display strong, .client-display strong { color: #79f2b4; font-size: 20px; }
+.copy-row { display: flex; align-items: center; gap: 10px; min-height: 40px; margin-top: 10px; }
+.copy-row span { color: #86efac; opacity: 0; transition: opacity .18s ease; font-size: 12px; }
+.copy-row span.visible { opacity: 1; }
 .folder-actions { margin-top: 16px; }
-.drop-target { height: 210px; border: 1px dashed #48545b; border-radius: 8px; display: grid; place-items: center; text-align: center; padding: 26px; background: #111518; }
+.drop-target { height: 210px; border: 1px dashed #48545b; border-radius: 8px; display: grid; place-items: center; text-align: center; padding: 26px; background: #111518; transition: border-color .18s ease, background .18s ease, transform .18s ease; }
+.drop-target:hover { border-color: #5f7078; transform: translateY(-1px); }
 .drop-target.dragover { border-color: #79f2b4; background: #14211b; }
-.drop-icon { width: 62px; height: 62px; display: grid; place-items: center; border-radius: 8px; background: #253039; color: #79f2b4; font-weight: 900; margin-bottom: 10px; }
+.drop-icon { min-width: 82px; height: 42px; display: grid; place-items: center; border-radius: 8px; background: #253039; color: #79f2b4; font-weight: 900; margin-bottom: 10px; padding: 0 10px; }
 small { color: #72808a; }
 .progress-list, .history-list { display: grid; gap: 10px; margin-top: 14px; max-height: 300px; overflow: auto; }
 .progress-row, .history-row { background: #101315; border: 1px solid #2a3238; border-radius: 8px; padding: 10px; }
 .progress-bar { height: 8px; background: #232b31; border-radius: 999px; overflow: hidden; margin-top: 8px; }
-.progress-bar span { display: block; height: 100%; background: #79f2b4; width: 0; }
+.progress-bar span { display: block; height: 100%; background: #79f2b4; width: 0; transition: width .22s ease; }
 .history-row { display: grid; gap: 3px; color: #aeb8be; }
 .history-row strong { color: #f3f6f7; }
 pre { margin: 0; min-height: 210px; max-height: 250px; overflow: auto; white-space: pre-wrap; color: #aeb8be; font-size: 12px; }

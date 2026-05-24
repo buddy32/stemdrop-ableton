@@ -12,6 +12,10 @@
     "server": "node server/ws-server.js",
     "helper": "node server/local-helper-api.js",
     "client": "node client/local-client.js",
+    "dev:helper": "node server/local-helper-api.js",
+    "dev:client": "node client/local-client.js",
+    "dev:render-client": "STEMDROP_SERVER_IP=wss://stemdrop-relay.onrender.com node client/local-client.js",
+    "test:relay": "node client/simulate-transfer.js",
     "history": "node server/history.js",
     "simulate": "node client/simulate-transfer.js",
     "gui": "node electron-app/run-gui.js"
